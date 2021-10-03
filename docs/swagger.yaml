@@ -1,0 +1,187 @@
+definitions:
+  utils.JSONTime:
+    properties:
+      time.Time:
+        type: string
+    type: object
+  utils.Resp:
+    properties:
+      code:
+        type: string
+      data:
+        type: object
+      msg:
+        type: string
+    type: object
+  v1.UserForm:
+    properties:
+      avatar:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      isValid:
+        type: boolean
+      mobile:
+        type: string
+      nickName:
+        type: string
+      pageIndex:
+        type: integer
+      pageSize:
+        type: integer
+      password:
+        example: f81015fee0b7ad8d472717286c0c7a55
+        type: string
+      roles:
+        items:
+          properties:
+            desc:
+              type: string
+            id:
+              type: integer
+            name:
+              type: string
+          type: object
+        type: array
+      userName:
+        example: guest
+        type: string
+    type: object
+host: 127.0.0.1:8000
+info:
+  contact:
+    email: 2804696160@qq.com
+    name: zhhnzw
+    url: http://www.swagger.io/support
+  description: 后台api服务
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: bio-api
+  version: "1.0"
+paths:
+  /group1/{userName}/{fileName}:
+    get:
+      description: 每个用户只能下载自己上传的文件
+      parameters:
+      - description: userName
+        in: path
+        name: userName
+        required: true
+        type: string
+      - description: fileName
+        in: path
+        name: fileName
+        required: true
+        type: string
+      summary: 下载文件
+      tags:
+      - file
+  /v1/login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 查询参数
+        in: body
+        name: object
+        schema:
+          $ref: '#/definitions/v1.UserForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Resp'
+      summary: 登录
+      tags:
+      - 用户
+  /v1/logout:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Cookie
+        in: header
+        name: Authorization
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Resp'
+      security:
+      - ApiKeyAuth: []
+      summary: 注销
+      tags:
+      - 用户
+  /v1/upload:
+    post:
+      consumes:
+      - multipart/form-data
+      description: 上传数据源文件以供生成统计图表
+      parameters:
+      - description: 文件
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Resp'
+      summary: 上传文件
+      tags:
+      - file
+  /v1/user:
+    get:
+      consumes:
+      - application/json
+      description: 获取用户信息
+      parameters:
+      - in: query
+        name: avatar
+        type: string
+      - in: query
+        name: email
+        type: string
+      - in: query
+        name: id
+        type: integer
+      - in: query
+        name: isSuper
+        type: boolean
+      - in: query
+        name: isValid
+        type: boolean
+      - in: query
+        name: mobile
+        type: string
+      - in: query
+        name: nickName
+        type: string
+      - in: query
+        name: userName
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Resp'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户信息
+      tags:
+      - 用户
+swagger: "2.0"

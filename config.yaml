@@ -1,0 +1,31 @@
+name: "bio-api"
+mode: "release"
+port: 8000
+alloworigins:
+  - https://www.1024cx.top
+  - https://1024cx.top
+  - http://localhost:8090
+
+log:
+  level: "debug"
+  filename: "bio-api.log"
+  max_size: 200
+  max_age: 30
+  max_backups: 7
+mysql:
+  host: "mysql-svc"  # 以k8s的serviceName访问
+  port: 3306         # 可以直接访问同一个namespace下的另一个Pod的内部端口
+  user: "root"
+  password: "1234qwer"
+  db_name: "backend-service"
+  max_open_conns: 200
+  max_idle_conns: 50
+redis:
+  host: "redis-svc"
+  port: 6379
+  password: ""
+  db: 0
+  pool_size: 100
+biochart:
+  host: "127.0.0.1"
+  port: 50051
