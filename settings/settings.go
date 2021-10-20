@@ -19,6 +19,7 @@ type AppConfig struct {
 	*MySQLConfig    `mapstructure:"mysql"`
 	*RedisConfig    `mapstructure:"redis"`
 	*BioChartConfig `mapstructure:"biochart"`
+	RPath           string `mapstructure:"rpath"`
 }
 
 type LogConfig struct {
@@ -49,12 +50,12 @@ type RedisConfig struct {
 
 type BioChartConfig struct {
 	Host string `mapstructure:"host"`
-	Port int    `mapstructure:"port"`
+	Port int64  `mapstructure:"port"`
 }
 
 func Init() (err error) {
 
-	viper.SetConfigFile("config.yaml")
+	viper.SetConfigFile("config_local.yaml")
 	//viper.SetConfigName("config") // 指定配置文件名称（不需要带后缀）
 	//viper.SetConfigType("yaml")   // 指定配置文件类型(专用于从远程获取配置信息时指定配置文件类型的)
 	viper.AddConfigPath(".")   // 指定查找配置文件的路径（这里使用相对路径）

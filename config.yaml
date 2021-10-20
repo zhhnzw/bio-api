@@ -28,4 +28,5 @@ redis:
   pool_size: 100
 biochart:
   host: "127.0.0.1"
-  port: 50051
+  port: 6312
+rpath: "/Users/zhhnzw/workspace/mygithub/bio-api/r"
