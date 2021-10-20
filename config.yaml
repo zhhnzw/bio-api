@@ -17,7 +17,7 @@ mysql:
   port: 3306         # 可以直接访问同一个namespace下的另一个Pod的内部端口
   user: "root"
   password: "1234qwer"
-  db_name: "backend-service"
+  db_name: "bio"
   max_open_conns: 200
   max_idle_conns: 50
 redis:

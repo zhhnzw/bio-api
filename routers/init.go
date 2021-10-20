@@ -1,6 +1,7 @@
 package routers
 
 import (
+	"bio-api/controller"
 	"bio-api/controller/v1"
 	_ "bio-api/docs"
 	"bio-api/logger"
@@ -32,8 +33,8 @@ func Setup() *gin.Engine {
 	router.Use(sessions.Sessions("session", store))
 	router.GET("/swagger/*any", gs.WrapHandler(swaggerFiles.Handler))
 	router.POST("/v1/login", v1.Login)
-	//router.Use(controller.SetAuthMiddleware())
-	SetUserRouter(router)
+	router.Use(controller.SetAuthMiddleware())
+	//SetUserRouter(router)
 	//SetFileRouter(router)
 	SetChartRouter(router)
 	router.NoMethod(func(c *gin.Context) {
