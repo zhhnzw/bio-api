@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"bio-api/settings"
 	"bio-api/utils"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -11,8 +12,6 @@ import (
 	"os"
 	"strings"
 )
-
-const PATH = "/Users/zhhnzw/workspace/mygithub/bio-api/r"
 
 // upload
 // @Summary 上传文件
@@ -43,7 +42,8 @@ func Pie(c *gin.Context) {
 			c.JSON(http.StatusInternalServerError, resp)
 			return
 		}
-		result, err := getHTMLFromResult()
+		genFileName := strings.Replace(file.Filename, "txt", "html", 1)
+		result, err := getHTMLFromResult("./r/" + genFileName)
 		if err != nil {
 			resp.Message = "getHTMLFromResult error:" + err.Error()
 			c.JSON(http.StatusInternalServerError, resp)
@@ -55,7 +55,7 @@ func Pie(c *gin.Context) {
 }
 
 func callR(fileName string) error {
-	rClient, err := roger.NewRClient("127.0.0.1", 6312)
+	rClient, err := roger.NewRClient(settings.Conf.BioChartConfig.Host, settings.Conf.BioChartConfig.Port)
 	if err != nil {
 		log.Println("Failed to connect")
 		return err
@@ -65,7 +65,7 @@ func callR(fileName string) error {
 		return err
 	}
 	//ret, err := sess.Eval("setwd('~/workspace/mygithub/bio-api/r')")
-	_, err = sess.Eval(fmt.Sprintf("setwd('%s')", PATH))
+	_, err = sess.Eval(fmt.Sprintf("setwd('%s')", settings.Conf.RPath))
 	if err != nil {
 		return err
 	}
@@ -89,8 +89,8 @@ func callR(fileName string) error {
 	return nil
 }
 
-func getHTMLFromResult() (string, error) {
-	file, err := os.Open(PATH + "/pie1.html")
+func getHTMLFromResult(path string) (string, error) {
+	file, err := os.Open(path)
 	if err != nil {
 		return "", err
 	}
