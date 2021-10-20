@@ -15,9 +15,10 @@ require (
 	github.com/onsi/gomega v1.16.0 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/satori/go.uuid v1.2.0
+	github.com/senseyeio/roger v0.0.0-20191009211040-43e330bee47f
 	github.com/spf13/viper v1.9.0
-	github.com/swaggo/gin-swagger v1.3.2 // indirect
-	github.com/swaggo/swag v1.7.3 // indirect
+	github.com/swaggo/gin-swagger v1.3.2
+	github.com/swaggo/swag v1.7.3
 	go.uber.org/zap v1.19.1
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519
 	google.golang.org/grpc v1.41.0

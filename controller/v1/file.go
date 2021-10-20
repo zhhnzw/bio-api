@@ -38,6 +38,7 @@ type uploadResp struct {
 // @Success 200 {object} utils.Resp
 // @Router /v1/upload [post]
 func Upload(c *gin.Context) {
+	// go-fastdfs 需要配置 peers 来组成集群：https://blog.csdn.net/tmt123421/article/details/90522244
 	//session := sessions.Default(c)
 	//userName := session.Get("userName").(string)
 	userName := "u231"

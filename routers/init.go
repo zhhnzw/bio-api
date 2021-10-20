@@ -24,8 +24,8 @@ func Setup() *gin.Engine {
 	router.Use(logger.GinLogger(), logger.GinRecovery(true))
 	config := cors.DefaultConfig()
 	config.AllowOrigins = settings.Conf.AllowOrigins
-	config.AllowCredentials = true
-	router.Use(cors.New(config))
+	//config.AllowCredentials = true
+	//router.Use(cors.New(config))
 	address := fmt.Sprintf("%s:%d", settings.Conf.RedisConfig.Host, settings.Conf.RedisConfig.Port)
 	store, err := redis.NewStore(16, "tcp", address, settings.Conf.RedisConfig.Password, []byte("secret"))
 	utils.CheckErr(err, "")
@@ -34,7 +34,8 @@ func Setup() *gin.Engine {
 	router.POST("/v1/login", v1.Login)
 	//router.Use(controller.SetAuthMiddleware())
 	SetUserRouter(router)
-	SetFileRouter(router)
+	//SetFileRouter(router)
+	SetChartRouter(router)
 	router.NoMethod(func(c *gin.Context) {
 		c.JSON(
 			http.StatusMethodNotAllowed,
