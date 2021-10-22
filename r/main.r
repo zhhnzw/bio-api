@@ -8,10 +8,20 @@ source('./base.r')
 #           './podfigure.svg',
 #           c("#FF0000"),c("#15FF00"),'Splitviolin','X','Y')
 
-ternaryplot_plot(
-c('./sample/BaseFunction/ternaryplot_plot/ternary_input.txt',
-    './sample/BaseFunction/ternaryplot_plot/ternary_group.txt'),
-c('./ternaryplot_plot1.svg',
-    'ternaryplot_plot2.svg',
-    'ternaryplot_plot3.txt'),
-'Ternary plot',0.4,FALSE)
+# ternaryplot_plot(
+# c('./sample/BaseFunction/ternaryplot_plot/ternary_input.txt',
+#     './sample/BaseFunction/ternaryplot_plot/ternary_group.txt'),
+# c('./ternaryplot_plot1.svg',
+#     'ternaryplot_plot2.svg',
+#     'ternaryplot_plot3.txt'),
+# 'Ternary plot',0.4,FALSE)
+
+# circos(c('./sample/BaseFunction/circos/taxonomy.txt',
+#          './sample/BaseFunction/circos/group.txt',
+#          './sample/BaseFunction/circos/otu_table.txt'),
+#        './taxonomy.pdf')
+
+groupedviolin(
+'./sample/BaseFunction/groupedviolin/mut_violin.txt',
+c('./mut.jpg','./mut.csv'),
+FALSE,'groupedviolin')

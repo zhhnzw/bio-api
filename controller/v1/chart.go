@@ -69,13 +69,6 @@ func Chart(c *gin.Context) {
 			}
 			resp.Data = "/static/" + genFileName
 		} else if chartType == "ternaryplot_plot" {
-			//ternaryplot_plot(
-			//	c('./sample/BaseFunction/ternaryplot_plot/ternary_input.txt',
-			//		'./sample/BaseFunction/ternaryplot_plot/ternary_group.txt'),
-			//	c('./ternaryplot_plot1.svg',
-			//		'ternaryplot_plot2.svg',
-			//		'ternaryplot_plot3.txt'),
-			//	'Ternary plot',0.4,FALSE)
 			pointSize := c.DefaultQuery("point_size", "0.4")
 			file1, err := c.FormFile("file1")
 			if err != nil {
@@ -104,6 +97,26 @@ func Chart(c *gin.Context) {
 			}
 			//TODO: 文件名临时写死，版本迭代会上传到独立的文件系统
 			resp.Data = [3]string{"/static/" + genFileName, "/static/" + genFileName1, "/static/ternaryplot_plot3.txt"}
+		} else if chartType == "groupedviolin" {
+			//groupedviolin(
+			//	'./sample/BaseFunction/groupedviolin/mut_violin.txt',
+			//	c('./mut.jpg','./mut.csv'),
+			//	FALSE,'groupedviolin')
+			genFileName := strings.Replace(file.Filename, "txt", "jpg", 1)
+			genFileName1 := strings.Replace(file.Filename, "txt", "csv", 1)
+			err := callR(
+				chartType,
+				fmt.Sprintf("'./static/%s'", file.Filename),                              // 带单引号对r的调用就是字符串
+				fmt.Sprintf("c('./static/%s','./static/%s')", genFileName, genFileName1), // 生成的文件写入到 r/static/ 下
+				"FALSE",
+				"groupedviolin",
+			)
+			if err != nil {
+				resp.Message = "callR error:" + err.Error()
+				c.JSON(http.StatusInternalServerError, resp)
+				return
+			}
+			resp.Data = [2]string{"/static/" + genFileName, "/static/" + genFileName1}
 		} else {
 			resp.Message = "not support that type: " + chartType
 			c.JSON(http.StatusOK, resp)
