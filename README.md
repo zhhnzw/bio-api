@@ -25,7 +25,7 @@ vue前端(下周重写成react版本)
 启动Rserve：
 在R客户端中：
 library(Rserve)
-Rserve(args="--no-save", port=6312)
+Rserve(args="--no-save", port=6311)
 
 文件保存路径：
 ~/workspace/data/fastdfs/files
