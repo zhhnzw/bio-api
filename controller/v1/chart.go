@@ -119,7 +119,10 @@ func Chart(c *gin.Context) {
 func callR(f string, params ...string) error {
 	rClient, err := roger.NewRClient(settings.Conf.BioChartConfig.Host, settings.Conf.BioChartConfig.Port)
 	if err != nil {
-		zap.L().Error("Failed to connect", zap.Error(err))
+		zap.L().Error(
+			"Failed to connect",
+			zap.Error(err),
+			zap.String("address", fmt.Sprintf("%s:%d", settings.Conf.BioChartConfig.Host, settings.Conf.BioChartConfig.Port)))
 		return err
 	}
 	sess, err := rClient.GetSession()

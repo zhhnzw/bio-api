@@ -28,5 +28,5 @@ redis:
   pool_size: 100
 biochart:
   host: "127.0.0.1"
-  port: 6312
+  port: 6311
 rpath: "~/workspace/mygithub/bio-api/r"  # r语言程序不从当前目录加载，所以给它指定目录
