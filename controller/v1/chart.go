@@ -7,14 +7,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/senseyeio/roger"
 	"go.uber.org/zap"
-	"io/ioutil"
 	"net/http"
-	"os"
 	"strings"
 )
 
 // upload
-// @Summary 上传文件
+// @Summary 上传数据文件，取得r语言生成的文件路径
 // @Description 上传数据源文件以供生成统计图表
 // @Tags chart
 // @Accept multipart/form-data
@@ -22,9 +20,10 @@ import (
 // @Produce json
 // @Success 200 {object} utils.Resp
 // @Router /v1/upload [post]
-func Pie(c *gin.Context) {
+func Chart(c *gin.Context) {
 	resp := utils.Resp{Data: make(map[string]string), Code: "1"}
 	file, e := c.FormFile("file")
+	chartType := c.Query("type")
 	if e != nil {
 		resp.Message = "upload file error:" + e.Error()
 		c.JSON(http.StatusOK, resp)
@@ -35,29 +34,29 @@ func Pie(c *gin.Context) {
 			c.JSON(http.StatusInternalServerError, resp)
 			return
 		}
-		genFileName := strings.Replace(file.Filename, "txt", "html", 1)
-		// 调用r语言函数生成图表
-		err := callR(
-			"pie",
-			fmt.Sprintf("'%s'", file.Filename), // 带单引号对r的调用就是字符串
-			fmt.Sprintf("'./static/%s'", genFileName), // 生成的文件写入到 r/static/ 下
-			"'pie'",
-			"NULL",
-			"2", // 没有单引号，对r的调用是int
-			"NULL")
-		if err != nil {
-			resp.Message = "callR error:" + err.Error()
-			c.JSON(http.StatusInternalServerError, resp)
+		if chartType == "pie" {
+			genFileName := strings.Replace(file.Filename, "txt", "html", 1)
+			// 调用r语言函数生成图表
+			err := callR(
+				"pie",
+				fmt.Sprintf("'%s'", file.Filename), // 带单引号对r的调用就是字符串
+				fmt.Sprintf("'./static/%s'", genFileName), // 生成的文件写入到 r/static/ 下
+				"'pie'",
+				"NULL",
+				"2", // 没有单引号，对r的调用是int
+				"NULL")
+			if err != nil {
+				resp.Message = "callR error:" + err.Error()
+				c.JSON(http.StatusInternalServerError, resp)
+				return
+			}
+			resp.Data = "/static/" + genFileName
+		} else {
+			resp.Message = "not support that type: " + chartType
+			c.JSON(http.StatusOK, resp)
 			return
 		}
-		//result, err := getHTMLFromResult("./r/static/" + genFileName)
-		//if err != nil {
-		//	resp.Message = "getHTMLFromResult error:" + err.Error()
-		//	c.JSON(http.StatusInternalServerError, resp)
-		//	return
-		//}
 		resp.Code = "0"
-		resp.Data = "/static/" + genFileName
 		c.JSON(http.StatusOK, resp)
 	}
 }
@@ -96,14 +95,4 @@ func callR(f string, params ...string) error {
 	//sess.SendCommand("dev.off()")
 	sess.Close()
 	return nil
-}
-
-func getHTMLFromResult(path string) (string, error) {
-	file, err := os.Open(path)
-	if err != nil {
-		return "", err
-	}
-	defer file.Close()
-	content, err := ioutil.ReadAll(file)
-	return string(content), nil
 }
