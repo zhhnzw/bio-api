@@ -8,7 +8,6 @@ import (
 	"github.com/senseyeio/roger"
 	"go.uber.org/zap"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -67,7 +66,7 @@ func Pie(c *gin.Context) {
 func callR(f string, params ...string) error {
 	rClient, err := roger.NewRClient(settings.Conf.BioChartConfig.Host, settings.Conf.BioChartConfig.Port)
 	if err != nil {
-		log.Println("Failed to connect")
+		zap.L().Error("Failed to connect", zap.Error(err))
 		return err
 	}
 	sess, err := rClient.GetSession()
@@ -81,12 +80,12 @@ func callR(f string, params ...string) error {
 	}
 	//TODO:有err，但是却正常加载了这个r文件
 	if v, err := sess.Eval("source('base.r')"); err != nil {
-		log.Println(v, err)
+		zap.L().Warn("source('base.r') waring", zap.Any("source_func_return", v), zap.Error(err))
 	}
 	call := fmt.Sprintf("%s(%s)", f, strings.Join(params, ","))
 	zap.L().Info("call r", zap.String("command", call))
 	if v, err := sess.Eval(call); err != nil {
-		log.Println(v, err)
+		zap.L().Error("call r failed", zap.Any("call_return", v), zap.Error(err))
 		return err
 	}
 	//sess.SendCommand("x <- c(1,2,3,4,5,6,7,8,9,10)")
