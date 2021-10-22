@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/senseyeio/roger"
+	"go.uber.org/zap"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -35,14 +36,21 @@ func Pie(c *gin.Context) {
 			c.JSON(http.StatusInternalServerError, resp)
 			return
 		}
+		genFileName := strings.Replace(file.Filename, "txt", "html", 1)
 		// 调用r语言函数生成图表
-		err := callR(file.Filename)
+		err := callR(
+			"pie",
+			fmt.Sprintf("'%s'", file.Filename), // 带单引号对r的调用就是字符串
+			fmt.Sprintf("'%s'", genFileName),
+			"'pie'",
+			"NULL",
+			"2", // 没有单引号，对r的调用是int
+			"NULL")
 		if err != nil {
 			resp.Message = "callR error:" + err.Error()
 			c.JSON(http.StatusInternalServerError, resp)
 			return
 		}
-		genFileName := strings.Replace(file.Filename, "txt", "html", 1)
 		result, err := getHTMLFromResult("./r/" + genFileName)
 		if err != nil {
 			resp.Message = "getHTMLFromResult error:" + err.Error()
@@ -54,7 +62,9 @@ func Pie(c *gin.Context) {
 	}
 }
 
-func callR(fileName string) error {
+// f: r语言函数
+// params: 传入r语言函数的参数
+func callR(f string, params ...string) error {
 	rClient, err := roger.NewRClient(settings.Conf.BioChartConfig.Host, settings.Conf.BioChartConfig.Port)
 	if err != nil {
 		log.Println("Failed to connect")
@@ -73,9 +83,8 @@ func callR(fileName string) error {
 	if v, err := sess.Eval("source('base.r')"); err != nil {
 		log.Println(v, err)
 	}
-	// pie('./pie.txt','./pie.html','pie',NULL,2,NULL)
-	genFileName := strings.Replace(fileName, "txt", "html", 1)
-	call := fmt.Sprintf("pie('%s','%s','pie',NULL,2,NULL)", fileName, genFileName)
+	call := fmt.Sprintf("%s(%s)", f, strings.Join(params, ","))
+	zap.L().Info("call r", zap.String("command", call))
 	if v, err := sess.Eval(call); err != nil {
 		log.Println(v, err)
 		return err
