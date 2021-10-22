@@ -1,0 +1,26 @@
+Code	Functional-Categories	Gene-Number
+A	RNA processing and modification	90
+B	Chromatin structure and dynamics	245
+C	Energy production and conversion	523
+D	Cell cycle control, cell division, chromosome partitioning	1034
+E	Amino acid transport and metabolism	793
+F	Nucleotide transport and metabolism	209
+G	Carbohydrate transport and metabolism	1124
+H	Coenzyme transport and metabolism	195
+I	Lipid transport and metabolism	579
+J	Translation, ribosomal structure and biogenesis	1424
+K	Transcription	1367
+L	Replication, recombination and repair	1576
+M	Cell wall/membrane/envelope biogenesis	949
+N	Cell motility	352
+O	Posttranslational modification, protein turnover, chaperones	1242
+P	Inorganic ion transport and metabolism	580
+Q	Secondary metabolites biosynthesis, transport and catabolism	641
+R	General function prediction only	3283
+S	Function unknown	1121
+T	Signal transduction mechanisms	891
+U	Intracellular trafficking, secretion, and vesicular transport	731
+V	Defense mechanisms	197
+W	Extracellular structures	38
+Y	Nuclear structure	5
+Z	Cytoskeleton	417

@@ -1,0 +1,9 @@
+gene	ExonicFunc	1000G_freq	dbSNP135
+ATP8B1	synonymous SNV	0.99	rs319438
+ABCB11	nonsynonymous SNV	0.59	rs2297622
+TJP2	synonymous SNV	0.28	rs2095876
+VPS33B	nonsynonymous SNV	0.77	rs11073964
+AMACR	nonsynonymous SNV	0.29	rs3195676
+HSD3B7	synonymous SNV	0.49	rs2305880
+HSD17B4	nonsynonymous SNV	0.4	rs11205
+SLC25A13	synonymous SNV	0.41	rs2301629

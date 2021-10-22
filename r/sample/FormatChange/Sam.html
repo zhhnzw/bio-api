@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=GBK">
+    <title>Explain SAM Flags</title>
+    <script type="text/javascript">
+        lstFlags = [["read paired", 0x1],
+            ["read mapped in proper pair", 0x2],
+            ["read unmapped", 0x4],
+            ["mate unmapped", 0x8],
+            ["read reverse strand", 0x10],
+            ["mate reverse strand", 0x20],
+            ["first in pair", 0x40],
+            ["second in pair", 0x80],
+            ["not primary alignment", 0x100],
+            ["read fails platform/vendor quality checks", 0x200],
+            ["read is PCR or optical duplicate", 0x400]];
+
+        function explainFlags() {
+            var flagValue = parseInt(document.getElementById('tb').value); //returns 0 or NaN if can't parse
+            var summary = "";
+            for(var i = 0; i < lstFlags.length; i++) {
+                var checkbox = document.getElementById('cb' + i)
+                if(lstFlags[i][1] & flagValue) {
+                    summary += " &nbsp; &nbsp; " + lstFlags[i][0] + "<br>";
+                    checkbox.checked = true;
+                } else {
+                    checkbox.checked = false;
+                }
+            }
+
+            document.getElementById('summary').innerHTML = summary;
+        }
+
+        function checkboxClicked() {
+//compute the new flag value
+            var newFlagValue = 0;
+            for(var i = 0; i < lstFlags.length; i++) {
+                var checkBox = document.getElementById('cb' + i);
+                if(checkBox.checked) {
+                    newFlagValue |= lstFlags[i][1];
+                }
+            }
+            var textbox = document.getElementById('tb');
+            textbox.value = newFlagValue;
+            explainFlags();
+        }
+    </script>
+
+    <noscript>This page requires JavaScript. Please enable it in your browser settings.</noscript>
+    <style type="text/css">
+        .box {
+            background: url('back.png');
+            width: 100%;
+            height: auto;
+            position: absolute;
+            z-index: -1;
+            background-size: cover;
+            left: 0;
+        }
+        .card1{
+            width: 80%;
+            height: 800px;
+            margin: 10px auto;
+            display: flex;
+            /*background: #409EFF;*/
+        }
+        #leftbox{
+            width: 50%;
+            height: 95%;
+            background: white;
+            padding: 5px 15px 10px 15px;
+            border-radius:40px 0 0 40px;
+            overflow: scroll;
+        }
+        #rightbox{
+            width: 50%;
+            height: 95%;
+            background: #a2d7ff;
+            padding: 5px 15px 10px 15px;
+            border-radius:0 40px 40px 0;
+            overflow: scroll;
+        }
+        #line{
+            margin: 10px auto;
+            text-align: center;
+            color: white;
+        }
+        #echart1 {
+            height: 1000px;
+            width: 768px;
+            margin: 10px auto;
+            background: #ffffff;
+        }
+        .b2{
+            height: auto;
+            width: auto;
+            margin: 10px auto;
+            display: flex;
+            flex-direction: column;
+        }
+        .output{
+            margin: 10px auto;
+        }
+        ::-webkit-scrollbar {
+            width: 0 !important;
+        }
+        ::-webkit-scrollbar {
+            width: 0 !important;height: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <div class="card1">
+        <div id="leftbox">
+            <h1>解读SAM Flag</h1>
+            This utility explains SAM flags in plain English. <br>
+            <br>
+
+            <form onsubmit="explainFlags(); return false;">
+                Flag: &nbsp;
+                <input id="tb" type="text" size="10"> &nbsp; &nbsp; &nbsp;
+                <input type="submit" value="Explain"><br>
+                <br>
+                Explanation:<br>
+                <!--        <script type="text/javascript">-->
+                <!--          for(var i = 0; i < lstFlags.length; i++) {-->
+                <!--            document.write("<input type=checkbox name=cb" + i + " id='cb" + i + "' onclick='checkboxClicked();'> &nbsp; " +lstFlags[i][0] + "</input><br>");-->
+                <!--          }-->
+                <!--        </script>-->
+                <input type="checkbox" name="cb0" id="cb0"
+                       onclick="checkboxClicked();"> &nbsp; read paired<br><input type="checkbox" name="cb1" id="cb1" onclick="checkboxClicked();"> &nbsp; read mapped in proper pair<br><input type="checkbox" name="cb2" id="cb2"
+                                                                                                                                                                                                onclick="checkboxClicked();"> &nbsp; read unmapped<br><input type="checkbox" name="cb3" id="cb3" onclick="checkboxClicked();"> &nbsp; mate unmapped<br>
+                <input type="checkbox" name="cb4" id="cb4" onclick="checkboxClicked();">
+                &nbsp; read reverse strand<br><input type="checkbox" name="cb5" id="cb5" onclick="checkboxClicked();"> &nbsp; mate reverse strand<br><input type="checkbox" name="cb6" id="cb6" onclick="checkboxClicked();"> &nbsp; first in pair<br><input type="checkbox" name="cb7" id="cb7" onclick="checkboxClicked();"> &nbsp; second in pair<br><input type="checkbox" name="cb8" id="cb8" onclick="checkboxClicked();"> &nbsp; not primary
+                alignment<br><input type="checkbox" name="cb9" id="cb9" onclick="checkboxClicked();"> &nbsp; read fails platform/vendor quality checks<br><input type="checkbox" name="cb10" id="cb10"
+                                                                                                                                                                 onclick="checkboxClicked();"> &nbsp; read is PCR or optical duplicate<br>
+                <br>
+                Summary:<br>
+                <div id="summary">
+                </div>
+            </form>
+        </div>
+        <div id="rightbox">
+            <h2>功能：<br></h2>
+            &nbsp;&nbsp;&nbsp;&nbsp;这个实用程序使得根据其SAM标志值来识别读取的属性很容易，或者相反，为给定的属性组合找到SAM Flag值。<br>
+
+            &nbsp;&nbsp;&nbsp;&nbsp;SAM文件格式：<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;sam文件格式包括两部分，头文件（header）和比对文件（alignment）。<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;头文件描述sam文件是否排序及参考序列的信息，一般被隐藏起来；而比对文件一般描述比对的信息，且前11列是固定的，第12列是可变的，每列解释如下：<br>
+
+            &nbsp;&nbsp;&nbsp;&nbsp;1 | QNAME | Query template NAME | reads名称<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;2 | FLAG | bitwise FLAG | 位标签<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;3 | RNAME | Reference sequence NAME | 参考序列名称<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;4 | POS | 1‐based leftmost POSition | 基于从1开始的左起比对位置<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;5 | MAPQ | MAPping Quality | reads比对质量<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;6 | CIAGR | CIGAR string | CIGAR字符串<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;7 | RNEXT | Ref. name of the mate/next read | 配对的reads比对到的参考序列名称<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;8 | PNEXT | Position of the mate/next read | 配对的reads比对到的位置<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;9 | TLEN | observed Template LENgth | reads与配对reads组成的片段的长度<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;10 | SEQ | segment SEQuence | reads序列<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;11 | QUAL | ASCII of Phred-scaled base QUALity+33 | 基于ASCII码-33质量体系的reads质量值<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;*12 | optional fields | variable OPTional fields in the format TAG:TYPE:VALUE<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;| 可选字段，格式为TAG:TYPE:VALUE，不同比对工具给出的字段及含义是不一样的<br>
+            <br>
+
+            <h2>输入：<br></h2>
+            &nbsp;&nbsp;&nbsp;&nbsp;文件格式说明：在SAM flag框里输入要解释的正整数值.<br>
+            <br>
+
+            <h2>参数：<br></h2>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;① 0x1 template having multiple segments in sequencing | reads是成对的<br>
+
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;② 0x2 each segment properly aligned according to the aligner | reads是成对的比对到合适的参考序列位置上<br>
+
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;③ 0x4 segment unmapped | 该read没有比对上参考序列<br>
+
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;④ 0x8 next segment in the template unmapped | 成对的另一端read没有比对上参考序列<br>
+
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⑤ 0x10 SEQ being reverse complemented | 该read是反向的<br>
+
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⑤ 0x20 SEQ of the next segment in the template being reverse complemented | 成对的另一端read是反向的<br>
+
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⑥ 0x40 the first segment in the template | 该序列是read1<br>
+
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⑦ 0x80 the last segment in the template | 该序列是read2<br>
+
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⑧ 0x100 secondary alignment | 该序列不是最优的比对位置<br>
+
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⑨ 0x200 not passing filters, such as platform/vendor quality controls | reads没有质量值<br>
+
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⑩ 0x400 PCR or optical duplicate | reads是PCR扩增来的或者重复的<br>
+
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;? 0x800 supplementary alignment | 备选的比对位置，一般用来预测嵌合体<br>
+
+            <br>
+
+            <h2>输出：<br></h2>
+            &nbsp;&nbsp;&nbsp;&nbsp;工具结果将输出SAM flag的解析结果。<br>
+        </div>
+    </div>
+</div>
+</body>
+</html>

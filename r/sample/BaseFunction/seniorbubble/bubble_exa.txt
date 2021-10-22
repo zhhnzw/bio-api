@@ -1,0 +1,21 @@
+Pathway	L-c-vs-L-ins (1184)	All (6799)	Pvalue	Qvalue
+Cytokine-cytokine receptor interaction	92	259	7.53E-13	1.20E-10
+Glycine, serine and threonine metabolism	29	57	7.10E-09	5.64E-07
+Carbonmetabolism	48	149	6.52E-06	3.45E-04
+Metabolismofxenobiotics by cytochrome P450	19	42	2.54E-05	1.01E-03
+Drugmetabolism-cytochromeP450	19	44	5.62E-05	1.79E-03
+Pentosephosphatepathway	16	36	0.000143179	3.25E-03
+Onecarbonpoolbyfolate	12	24	0.000253413	5.04E-03
+Arachidonicacidmetabolism	24	68	0.000290983	5.14E-03
+Steroidbiosynthesis	12	25	0.000410728	6.53E-03
+Porphyrinandchlorophyllmetabolism	16	40	0.000614129	8.80E-03
+Linoleicacidmetabolism	14	33	0.000663927	8.80E-03
+Pentoseandglucuronateinterconversions	15	39	0.001454765	1.78E-02
+PPARsignalingpathway	27	89	0.001841842	1.90E-02
+Glycolysis/Gluconeogenesis	27	89	0.001841842	1.90E-02
+Biosynthesisofaminoacids	29	98	0.001944177	1.90E-02
+Fructoseandmannosemetabolism	16	44	0.002036523	1.90E-02
+Insulinsignalingpathway	50	195	0.002177237	1.92E-02
+Adipocytokinesignalingpathway	30	107	0.004039901	3.38E-02
+Arginineandprolinemetabolism	20	64	0.004741162	3.75E-02
+Fattyaciddegradation	18	56	0.005185285	3.75E-02

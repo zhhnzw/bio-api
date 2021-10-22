@@ -1,0 +1,4 @@
+Sand	Silt	Clay
+Sand1	Silt1	Clay1
+Sand2	Silt2	Clay2
+Sand3	Silt3	Clay3

@@ -1,0 +1,6 @@
+Pathway	TA-VS-CK 	TB-vs-CK	TC-vs-CK
+Photosynthesis	40	34	20
+Phenylpropanoid_biosynthesis	  64	50	15
+Photosynthesis_antenna_proteins	10	40	15
+Ribosome	224	100	150
+Plant_hormone_signal_transduction	91	50	30

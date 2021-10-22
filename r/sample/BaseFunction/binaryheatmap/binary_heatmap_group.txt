@@ -1,0 +1,3 @@
+MUT;	Mutation
+AMP;	Amplification
+HOMDEL;	Deep deletion

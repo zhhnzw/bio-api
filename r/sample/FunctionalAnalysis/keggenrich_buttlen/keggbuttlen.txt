@@ -1,0 +1,12 @@
+ID 	Description 	enrich_factor 	pvalue 	gene_number
+ko04110 	Cell cycle 	2.2 	2.86E-06 	36
+ko04141 	Protein processing in endoplasmic reticulum 	2.01 	5.54E-06 	42
+ko04115 	p53 signaling pathway 	2.35 	0.000165788 	20
+ko00970 	Aminoacyl-tRNA biosynthesis 	2.6 	0.000518871 	14
+ko05166 	HTLV-I infection 	1.56 	0.00074288 	51
+ko00100 	Steroid biosynthesis 	3.18 	0.001975612 	8
+ko05162 	Measles 	1.69 	0.002376268 	30
+ko00450 	Selenocompound metabolism 	3.25 	0.003307002 	7
+ko01230 	Biosynthesis of amino acids 	1.91 	0.003607972 	19
+ko00790 	Folate biosynthesis 	3.58 	0.00369798 	6
+ko04668 	TNF signaling pathway 	1.76 	0.003754481 	24

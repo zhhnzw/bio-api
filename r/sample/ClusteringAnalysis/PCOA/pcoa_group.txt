@@ -1,0 +1,10 @@
+name	group
+CK-1	CK
+CK-2	CK
+CK-3	CK
+TA-1	TA
+TA-2	TA
+TA-3	TA
+TB-1	TB
+TB-2	TB
+TB-3	TB

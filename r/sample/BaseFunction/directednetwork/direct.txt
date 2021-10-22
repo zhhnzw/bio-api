@@ -1,0 +1,13 @@
+source	target	type
+has-miR-20	AK2	1
+has-miR-20	RAN	1
+RAN	has-miR-20	1
+has-miR-20	TPI1	2
+has-miR-20	ATL2	2
+has-miR-20	OLA1	1
+has-miR-22	TPI1	1
+has-miR-22	ATL2	1
+has-miR-22	SMC2	2
+has-miR-36	TPI1	2
+has-miR-36	CALD1	2
+has-miR-36	NAP1L1	2
