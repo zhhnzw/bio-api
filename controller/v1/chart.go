@@ -50,14 +50,15 @@ func Pie(c *gin.Context) {
 			c.JSON(http.StatusInternalServerError, resp)
 			return
 		}
-		result, err := getHTMLFromResult("./r/static/" + genFileName)
-		if err != nil {
-			resp.Message = "getHTMLFromResult error:" + err.Error()
-			c.JSON(http.StatusInternalServerError, resp)
-			return
-		}
-		c.String(http.StatusOK, result)
-		//c.HTML(http.StatusOK, "./r/pie.html", nil)
+		//result, err := getHTMLFromResult("./r/static/" + genFileName)
+		//if err != nil {
+		//	resp.Message = "getHTMLFromResult error:" + err.Error()
+		//	c.JSON(http.StatusInternalServerError, resp)
+		//	return
+		//}
+		resp.Code = "0"
+		resp.Data = "/static/" + genFileName
+		c.JSON(http.StatusOK, resp)
 	}
 }
 
