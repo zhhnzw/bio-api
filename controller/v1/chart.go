@@ -38,9 +38,9 @@ func Chart(c *gin.Context) {
 			genFileName := strings.Replace(file.Filename, "txt", "html", 1)
 			// 调用r语言函数生成图表
 			err := callR(
-				"pie",
-				fmt.Sprintf("'%s'", file.Filename), // 带单引号对r的调用就是字符串
-				fmt.Sprintf("'./static/%s'", genFileName), // 生成的文件写入到 r/static/ 下
+				chartType,
+				fmt.Sprintf("'./static/%s'", file.Filename), // 带单引号对r的调用就是字符串
+				fmt.Sprintf("'./static/%s'", genFileName),   // 生成的文件写入到 r/static/ 下
 				"'pie'",
 				"NULL",
 				"2", // 没有单引号，对r的调用是int
@@ -51,6 +51,59 @@ func Chart(c *gin.Context) {
 				return
 			}
 			resp.Data = "/static/" + genFileName
+		} else if chartType == "beeswarm_chart" {
+			genFileName := strings.Replace(file.Filename, "txt", "svg", 1)
+			err := callR(
+				chartType,
+				fmt.Sprintf("'./static/%s'", file.Filename), // 带单引号对r的调用就是字符串
+				fmt.Sprintf("'./static/%s'", genFileName),   // 生成的文件写入到 r/static/ 下
+				"'蜂群图'",
+				"'X轴'",
+				"'Y轴'",
+				"c('#FF0000','#00FF95','#3C00FF')", // 没有单引号，对r的调用是int
+			)
+			if err != nil {
+				resp.Message = "callR error:" + err.Error()
+				c.JSON(http.StatusInternalServerError, resp)
+				return
+			}
+			resp.Data = "/static/" + genFileName
+		} else if chartType == "ternaryplot_plot" {
+			//ternaryplot_plot(
+			//	c('./sample/BaseFunction/ternaryplot_plot/ternary_input.txt',
+			//		'./sample/BaseFunction/ternaryplot_plot/ternary_group.txt'),
+			//	c('./ternaryplot_plot1.svg',
+			//		'ternaryplot_plot2.svg',
+			//		'ternaryplot_plot3.txt'),
+			//	'Ternary plot',0.4,FALSE)
+			pointSize := c.DefaultQuery("point_size", "0.4")
+			file1, err := c.FormFile("file1")
+			if err != nil {
+				resp.Message = "upload file1 error:" + err.Error()
+				c.JSON(http.StatusOK, resp)
+				return
+			}
+			if err := c.SaveUploadedFile(file1, "./r/static/"+file1.Filename); err != nil {
+				c.JSON(http.StatusInternalServerError, resp)
+				return
+			}
+			genFileName := strings.Replace(file.Filename, "txt", "svg", 1)
+			genFileName1 := strings.Replace(file1.Filename, "txt", "svg", 1)
+			err = callR(
+				chartType,
+				fmt.Sprintf("c('./static/%s','./static/%s')", file.Filename, file1.Filename),                              // 带单引号对r的调用就是字符串
+				fmt.Sprintf("c('./static/%s','./static/%s','./static/ternaryplot_plot3.txt')", genFileName, genFileName1), // 生成的文件写入到 r/static/ 下
+				"'Ternary plot'",
+				pointSize,
+				"FALSE",
+			)
+			if err != nil {
+				resp.Message = "callR error:" + err.Error()
+				c.JSON(http.StatusInternalServerError, resp)
+				return
+			}
+			//TODO: 文件名临时写死，版本迭代会上传到独立的文件系统
+			resp.Data = [3]string{"/static/" + genFileName, "/static/" + genFileName1, "/static/ternaryplot_plot3.txt"}
 		} else {
 			resp.Message = "not support that type: " + chartType
 			c.JSON(http.StatusOK, resp)
