@@ -37,6 +37,7 @@ func Setup() *gin.Engine {
 	//SetUserRouter(router)
 	//SetFileRouter(router)
 	SetChartRouter(router)
+	router.StaticFS("/static", http.Dir("./r/static"))
 	router.NoMethod(func(c *gin.Context) {
 		c.JSON(
 			http.StatusMethodNotAllowed,

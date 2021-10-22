@@ -31,7 +31,7 @@ func Pie(c *gin.Context) {
 		return
 	} else {
 		// 保存文件
-		if err := c.SaveUploadedFile(file, "./r/"+file.Filename); err != nil {
+		if err := c.SaveUploadedFile(file, "./r/static/"+file.Filename); err != nil {
 			c.JSON(http.StatusInternalServerError, resp)
 			return
 		}
@@ -40,7 +40,7 @@ func Pie(c *gin.Context) {
 		err := callR(
 			"pie",
 			fmt.Sprintf("'%s'", file.Filename), // 带单引号对r的调用就是字符串
-			fmt.Sprintf("'%s'", genFileName),
+			fmt.Sprintf("'./static/%s'", genFileName), // 生成的文件写入到 r/static/ 下
 			"'pie'",
 			"NULL",
 			"2", // 没有单引号，对r的调用是int
@@ -50,7 +50,7 @@ func Pie(c *gin.Context) {
 			c.JSON(http.StatusInternalServerError, resp)
 			return
 		}
-		result, err := getHTMLFromResult("./r/" + genFileName)
+		result, err := getHTMLFromResult("./r/static/" + genFileName)
 		if err != nil {
 			resp.Message = "getHTMLFromResult error:" + err.Error()
 			c.JSON(http.StatusInternalServerError, resp)
