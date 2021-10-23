@@ -19,7 +19,7 @@ import (
 // @Param file formData file true "文件"
 // @Produce json
 // @Success 200 {object} utils.Resp
-// @Router /v1/upload [post]
+// @Router /v1/chart [post]
 func Chart(c *gin.Context) {
 	resp := utils.Resp{Data: make(map[string]string), Code: "1"}
 	file, e := c.FormFile("file")
@@ -98,10 +98,6 @@ func Chart(c *gin.Context) {
 			//TODO: 文件名临时写死，版本迭代会上传到独立的文件系统
 			resp.Data = [3]string{"/static/" + genFileName, "/static/" + genFileName1, "/static/ternaryplot_plot3.txt"}
 		} else if chartType == "groupedviolin" {
-			//groupedviolin(
-			//	'./sample/BaseFunction/groupedviolin/mut_violin.txt',
-			//	c('./mut.jpg','./mut.csv'),
-			//	FALSE,'groupedviolin')
 			genFileName := strings.Replace(file.Filename, "txt", "jpg", 1)
 			genFileName1 := strings.Replace(file.Filename, "txt", "csv", 1)
 			err := callR(
@@ -117,6 +113,21 @@ func Chart(c *gin.Context) {
 				return
 			}
 			resp.Data = [2]string{"/static/" + genFileName, "/static/" + genFileName1}
+		} else if chartType == "violin" {
+			// violin('./sample/BaseFunction/violin/violin.txt','./violin.png',FALSE)
+			genFileName := strings.Replace(file.Filename, "txt", "png", 1)
+			err := callR(
+				chartType,
+				fmt.Sprintf("'./static/%s'", file.Filename), // 带单引号对r的调用就是字符串
+				fmt.Sprintf("'./static/%s'", genFileName),   // 生成的文件写入到 r/static/ 下
+				"FALSE",
+			)
+			if err != nil {
+				resp.Message = "callR error:" + err.Error()
+				c.JSON(http.StatusInternalServerError, resp)
+				return
+			}
+			resp.Data = "/static/" + genFileName
 		} else {
 			resp.Message = "not support that type: " + chartType
 			c.JSON(http.StatusOK, resp)

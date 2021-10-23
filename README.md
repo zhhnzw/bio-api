@@ -1,6 +1,8 @@
 # bio-api
 生物信息云画图平台-api服务
 
+本地运行本项目：`go run main.go`
+
 访问swagger接口文档：http://localhost:8000/swagger/index.html#/
 
 基于docker运行本项目：
@@ -15,21 +17,12 @@
 ![生物信息应用架构](生物信息应用架构.png)
 ![服务组成](服务组成.png)
 
-当前需要启动的服务：
-go-fastdfs文件存储服务
-Rserve
-java后端应用(下周重写成golang版本)
-golang后端应用
-vue前端(下周重写成react版本)
+需要启动的服务(配置文件`config.yaml`)：
+* golang后端应用
+* Rserve(在R客户端中执行:`library(Rserve);Rserve(args="--no-save", port=6311)`)
+* Mysql
+* Redis
+* <del>go-fastdfs文件存储服务</del>
 
-启动Rserve：
-在R客户端中：
-library(Rserve)
-Rserve(args="--no-save", port=6311)
-
-文件保存路径：
-~/workspace/data/fastdfs/files
-
-R生成的图片保存路径：
-~/workspace/data/bio
-
+<del>go-fastdfs文件保存路径：</del>
+<del>~/workspace/data/fastdfs/files</del>
