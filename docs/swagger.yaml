@@ -80,6 +80,27 @@ paths:
       summary: 下载文件
       tags:
       - file
+  /v1/chart:
+    post:
+      consumes:
+      - multipart/form-data
+      description: 上传数据源文件以供生成统计图表
+      parameters:
+      - description: 文件
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Resp'
+      summary: 上传数据文件，取得r语言生成的文件路径
+      tags:
+      - chart
   /v1/login:
     post:
       consumes:

@@ -58,6 +58,38 @@ var doc = `{
                 ]
             }
         },
+        "/v1/chart": {
+            "post": {
+                "description": "上传数据源文件以供生成统计图表",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "chart"
+                ],
+                "summary": "上传数据文件，取得r语言生成的文件路径",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "文件",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Resp"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/login": {
             "post": {
                 "consumes": [
