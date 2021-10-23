@@ -16,6 +16,6 @@ CREATE TABLE IF NOT EXISTS `sys_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 BEGIN;
-INSERT INTO `sys_user` VALUES (1, 'admin', 'admin', '$2a$10$lH8S4B26U/XeifipxpdEW.VZtpvvCh8LVOCasZgGcC2m8qC/YH3c.', '13543434343', '2131@11.com', 1, 1, '', '2020-06-29 20:15:22', '2020-07-01 23:19:46', '1970-01-01 08:00:01');
+INSERT INTO `sys_user` VALUES (1, 'admin', 'admin', '$2a$10$XZ7GXItn9TLUa2JSoJTiouqAlUHwMqOum7/eQ/UDuVTi2Vc8jGvay', '13543434343', '2131@11.com', 1, 1, '', '2020-06-29 20:15:22', '2020-07-01 23:19:46', '1970-01-01 08:00:01');
 INSERT INTO `sys_user` VALUES (2, 'guest', '访客', '$2a$10$lH8S4B26U/XeifipxpdEW.VZtpvvCh8LVOCasZgGcC2m8qC/YH3c.', '13543434341', '21311@11.com', 1, 0, '', '2020-07-01 23:20:22', '2020-07-01 23:20:45', '1970-01-01 08:00:01');
 COMMIT;

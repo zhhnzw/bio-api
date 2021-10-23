@@ -21,7 +21,9 @@ source('./base.r')
 #          './sample/BaseFunction/circos/otu_table.txt'),
 #        './taxonomy.pdf')
 
-groupedviolin(
-'./sample/BaseFunction/groupedviolin/mut_violin.txt',
-c('./mut.jpg','./mut.csv'),
-FALSE,'groupedviolin')
+# groupedviolin(
+# './sample/BaseFunction/groupedviolin/mut_violin.txt',
+# c('./mut.jpg','./mut.csv'),
+# FALSE,'groupedviolin')
+
+# violin('./sample/BaseFunction/violin/violin.txt','./violin.png',FALSE)
