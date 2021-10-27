@@ -234,6 +234,29 @@ func Chart(c *gin.Context) {
 				return
 			}
 			resp.Data = [1]string{"/static/" + genFileName}
+		} else if chartType == "PCOA" {
+			file1, err := c.FormFile("file1")
+			if err != nil {
+				resp.Message = "upload file1 error:" + err.Error()
+				c.JSON(http.StatusOK, resp)
+				return
+			}
+			if err := c.SaveUploadedFile(file1, "./r/static/"+file1.Filename); err != nil {
+				c.JSON(http.StatusInternalServerError, resp)
+				return
+			}
+			genFileName := strings.Replace(file.Filename, "txt", "svg", 1)
+			err = callR(
+				chartType,
+				fmt.Sprintf("c('./static/%s','./static/%s')", file.Filename, file1.Filename), // 带单引号对r的调用就是字符串
+				fmt.Sprintf("'./static/%s'", genFileName),                                    // 生成的文件写入到 r/static/ 下
+			)
+			if err != nil {
+				resp.Message = "callR error:" + err.Error()
+				c.JSON(http.StatusInternalServerError, resp)
+				return
+			}
+			resp.Data = [1]string{"/static/" + genFileName}
 		} else {
 			resp.Message = "not support that type: " + chartType
 			c.JSON(http.StatusOK, resp)
