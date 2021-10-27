@@ -191,6 +191,31 @@ func Chart(c *gin.Context) {
 				return
 			}
 			resp.Data = [1]string{"/static/" + genFileName}
+			//upset_chart("./sample/BaseFunction/upset_chart/seniorvenn.txt", #输入文件路径
+			//"./upsetchart.svg", #图片输出路径
+			//8,8, #宽✖高
+			//"Set Size", #集合(横矩形)名
+			//"Intersection Size", #纵矩形名
+			//order_by = c("freq") #c("freq"), c("degree"), c("freq", "degree")
+			//)
+		} else if chartType == "upset_chart" {
+			genFileName := strings.Replace(file.Filename, "txt", "svg", 1)
+			err := callR(
+				chartType,
+				fmt.Sprintf("'./static/%s'", file.Filename), // 带单引号对r的调用就是字符串
+				fmt.Sprintf("'./static/%s'", genFileName),   // 生成的文件写入到 r/static/ 下
+				"8",
+				"8",
+				"'Set Size'",
+				"'Intersection Size'",
+				"order_by=c('freq')",
+			)
+			if err != nil {
+				resp.Message = "callR error:" + err.Error()
+				c.JSON(http.StatusInternalServerError, resp)
+				return
+			}
+			resp.Data = [1]string{"/static/" + genFileName}
 		} else {
 			resp.Message = "not support that type: " + chartType
 			c.JSON(http.StatusOK, resp)
