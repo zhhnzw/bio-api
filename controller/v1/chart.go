@@ -128,6 +128,27 @@ func Chart(c *gin.Context) {
 				return
 			}
 			resp.Data = "/static/" + genFileName
+		} else if chartType == "box_line" {
+			// data_path=c("./sample/BaseFunction/box_line/box.txt")
+			// save_path="./box_out.svg"
+			// groupname=c("group1")
+			// box_line(data_path,save_path,groupname,c(),NULL,NULL)
+			genFileName := strings.Replace(file.Filename, "txt", "svg", 1)
+			err := callR(
+				chartType,
+				fmt.Sprintf("c('./static/%s')", file.Filename), // 带单引号对r的调用就是字符串
+				fmt.Sprintf("'./static/%s'", genFileName),      // 生成的文件写入到 r/static/ 下
+				"c('group')",
+				"c()",
+				"NULL",
+				"NULL",
+			)
+			if err != nil {
+				resp.Message = "callR error:" + err.Error()
+				c.JSON(http.StatusInternalServerError, resp)
+				return
+			}
+			resp.Data = [1]string{"/static/" + genFileName}
 		} else {
 			resp.Message = "not support that type: " + chartType
 			c.JSON(http.StatusOK, resp)
