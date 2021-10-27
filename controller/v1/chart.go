@@ -191,13 +191,6 @@ func Chart(c *gin.Context) {
 				return
 			}
 			resp.Data = [1]string{"/static/" + genFileName}
-			//upset_chart("./sample/BaseFunction/upset_chart/seniorvenn.txt", #输入文件路径
-			//"./upsetchart.svg", #图片输出路径
-			//8,8, #宽✖高
-			//"Set Size", #集合(横矩形)名
-			//"Intersection Size", #纵矩形名
-			//order_by = c("freq") #c("freq"), c("degree"), c("freq", "degree")
-			//)
 		} else if chartType == "upset_chart" {
 			genFileName := strings.Replace(file.Filename, "txt", "svg", 1)
 			err := callR(
@@ -209,6 +202,31 @@ func Chart(c *gin.Context) {
 				"'Set Size'",
 				"'Intersection Size'",
 				"order_by=c('freq')",
+			)
+			if err != nil {
+				resp.Message = "callR error:" + err.Error()
+				c.JSON(http.StatusInternalServerError, resp)
+				return
+			}
+			resp.Data = [1]string{"/static/" + genFileName}
+		} else if chartType == "NMDS" {
+			file1, err := c.FormFile("file1")
+			if err != nil {
+				resp.Message = "upload file1 error:" + err.Error()
+				c.JSON(http.StatusOK, resp)
+				return
+			}
+			if err := c.SaveUploadedFile(file1, "./r/static/"+file1.Filename); err != nil {
+				c.JSON(http.StatusInternalServerError, resp)
+				return
+			}
+			genFileName := strings.Replace(file.Filename, "txt", "svg", 1)
+			err = callR(
+				chartType,
+				fmt.Sprintf("c('./static/%s','./static/%s')", file.Filename, file1.Filename), // 带单引号对r的调用就是字符串
+				fmt.Sprintf("'./static/%s'", genFileName),                                    // 生成的文件写入到 r/static/ 下
+				"18",
+				"18",
 			)
 			if err != nil {
 				resp.Message = "callR error:" + err.Error()
@@ -247,7 +265,7 @@ func callR(f string, params ...string) error {
 		return err
 	}
 	//TODO:有err，但是却正常加载了这个r文件
-	if v, err := sess.Eval("source('base.r')"); err != nil {
+	if v, err := sess.Eval("source('base.r');source('FunctionalAnalysis.r');source('ClusteringAnalysis.r');"); err != nil {
 		zap.L().Warn("source('base.r') waring", zap.Any("source_func_return", v), zap.Error(err))
 	}
 	call := fmt.Sprintf("%s(%s)", f, strings.Join(params, ","))
