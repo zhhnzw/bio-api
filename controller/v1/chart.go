@@ -168,6 +168,29 @@ func Chart(c *gin.Context) {
 				return
 			}
 			resp.Data = [1]string{"/static/" + genFileName}
+		} else if chartType == "maplot" {
+			genFileName := strings.Replace(file.Filename, "txt", "jpg", 1)
+			err := callR(
+				chartType,
+				fmt.Sprintf("'./static/%s'", file.Filename), // 带单引号对r的调用就是字符串
+				fmt.Sprintf("'./static/%s'", genFileName),   // 生成的文件写入到 r/static/ 下
+				"'MA_plot'",
+				"4",
+				"5",
+				"7",
+				"1",
+				"'A'",
+				"'M'",
+				"'red'",
+				"'gray'",
+				"'green'",
+			)
+			if err != nil {
+				resp.Message = "callR error:" + err.Error()
+				c.JSON(http.StatusInternalServerError, resp)
+				return
+			}
+			resp.Data = [1]string{"/static/" + genFileName}
 		} else {
 			resp.Message = "not support that type: " + chartType
 			c.JSON(http.StatusOK, resp)
