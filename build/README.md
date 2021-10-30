@@ -1,14 +1,13 @@
 ### 准备工作
 
-挂载磁盘
-
 ```bash
-# 在 node-1 上执行
+# 挂载磁盘，在 node-1 上执行
 $ mkdir /mnt/disks
 $ for vol in mysql redis app; do
     mkdir /mnt/disks/$vol
     mount -t tmpfs $vol /mnt/disks/$vol
 done
+$ kubectl create -f local_sc.yaml  # 创建StorageClass
 ```
 
 ### 部署mysql
@@ -56,6 +55,7 @@ binlog.index       ib_logfile0        performance_schema undo_001
 ca-key.pem         ib_logfile1        private_key.pem    undo_002
 ca.pem             ibdata1            public_key.pem
 ```
+
 可见，文件已经写到node上，当Pod被重建的时候，会寻找满足pvc要求的pv对应所在的node，也会被调度到之前运行的node上，因此Pod被重建后数据也不会丢失。
 
 ### 部署redis

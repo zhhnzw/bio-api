@@ -75,8 +75,9 @@ spec:
         image: busybox
         command: ['sh', '-c', 'mkdir -p /data/middleware-data/redis/log/;mkdir -p /data/middleware-data/redis/conf/;mkdir -p /data/middleware-data/redis/data/']
         volumeMounts:
-        - name: data
+        - name: redis-data
           mountPath: /data/middleware-data/redis/
+          subPath: "redis"
       containers:
       - name: redis
         image: redis:5.0.6
@@ -92,13 +93,14 @@ spec:
         volumeMounts:
         - name: redis-config
           mountPath: /data/middleware-data/redis/conf/
-        - name: data
+        - name: redis-data
           mountPath: /data/middleware-data/redis/
+          subPath: "redis"
       volumes:
       - name: redis-config
         configMap:
           name: redis-conf
-      - name: data
+      - name: redis-data
         persistentVolumeClaim:
           claimName: local-redis-claim
 ---
