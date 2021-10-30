@@ -283,13 +283,16 @@ func callR(f string, params ...string) error {
 		return err
 	}
 	//ret, err := sess.Eval("setwd('~/workspace/mygithub/bio-api/r')")
-	_, err = sess.Eval(fmt.Sprintf("setwd('%s')", settings.Conf.RPath))
+	command := fmt.Sprintf("setwd('%s');", settings.Conf.RPath)
+	_, err = sess.Eval(command)
 	if err != nil {
+		zap.L().Error("r setwd error", zap.Error(err), zap.String("command", command))
 		return err
 	}
 	//TODO:有err，但是却正常加载了这个r文件
-	if v, err := sess.Eval("source('base.r');source('FunctionalAnalysis.r');source('ClusteringAnalysis.r');"); err != nil {
-		zap.L().Warn("source('base.r') waring", zap.Any("source_func_return", v), zap.Error(err))
+	command = "source('base.r');source('FunctionalAnalysis.r');source('ClusteringAnalysis.r');"
+	if _, err := sess.Eval(command); err != nil {
+		zap.L().Warn("source waring", zap.Error(err), zap.String("command", command))
 	}
 	call := fmt.Sprintf("%s(%s)", f, strings.Join(params, ","))
 	zap.L().Info("call r", zap.String("command", call))
