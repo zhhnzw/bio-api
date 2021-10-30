@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: backend-service
+  name: backend-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: backend-service
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        name: backend-service
+    spec:
+      containers:
+      - image: registry.cn-qingdao.aliyuncs.com/zw_private/bio-r:v0.1
+        name: bio-r
+        imagePullPolicy: IfNotPresent
+      - image: registry.cn-qingdao.aliyuncs.com/zw_private/bio-api:v0.1
+        name: bio-api
+        imagePullPolicy: IfNotPresent
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service-svc
+  namespace: default
+  labels: 
+    name: backend-service
+spec:
+  type: NodePort
+  ports:
+  - port: 8000
+    protocol: TCP
+    targetPort: 8000
+    name: backend-service
+    nodePort: 31000
+  selector:
+    name: backend-service

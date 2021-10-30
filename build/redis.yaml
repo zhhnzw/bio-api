@@ -1,4 +1,40 @@
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: local-redis-pv
+spec:
+  capacity:
+    storage: 0.2Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: local-storage
+  local:
+    # path: /mnt/disks/redis
+    path: /Volumes/k8s-disk/redis
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - docker-desktop
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: local-redis-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 0.2Gi
+  storageClassName: local-storage
+---
+apiVersion: v1
 data:
   redis.conf: |
         bind 0.0.0.0
@@ -63,8 +99,8 @@ spec:
         configMap:
           name: redis-conf
       - name: data
-        hostPath:
-          path: /data/middleware-data/redis/
+        persistentVolumeClaim:
+          claimName: local-redis-claim
 ---
 apiVersion: v1
 kind: Service
