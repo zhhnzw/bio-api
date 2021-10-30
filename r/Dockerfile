@@ -15,8 +15,8 @@ WORKDIR /workspace
 COPY ramnathv-rCharts-479a4f9.tar.gz /workspace
 RUN R -e 'install.packages("ramnathv-rCharts-479a4f9.tar.gz",repos=NULL);install.packages("Rserve",,"http://rforge.net/", type="source")'
 
+# 只拷贝这一个文件，其他文件从volume挂载
 COPY run_for_docker.sh /workspace
-COPY base.r /workspace
 
 # 声明需要开放的端口
 EXPOSE 6311
