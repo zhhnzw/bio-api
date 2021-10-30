@@ -26,17 +26,15 @@ FROM scratch as runner
 # 支持中文
 ENV LANF C.UTF-8
 
-WORKDIR /
+WORKDIR /workspace
 
 # 从构建阶段把文件拷贝过来
-COPY --from=builder /etc/timezone /etc/timezone
-COPY --from=builder /etc/localtime /etc/localtime
+COPY --from=builder /etc/timezone /etc/localtime /etc/
 COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
-COPY --from=builder /workspace/config.yaml /
-COPY --from=builder /workspace/bio-api /
+COPY --from=builder /workspace/config.yaml /workspace/bio-api ./
 
 # 声明需要开放的端口
-EXPOSE 8080
+EXPOSE 8000
 
 # 执行
-ENTRYPOINT ["/bio-api"]
+ENTRYPOINT ["./bio-api"]
