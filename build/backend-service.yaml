@@ -1,3 +1,83 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: local-storage-app
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: local-app-pv
+spec:
+  capacity:
+    storage: 0.5Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: local-storage-app
+  local:
+    # path: /mnt/disks/app
+    path: /Volumes/k8s-disk/app
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - docker-desktop
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: local-app-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 0.5Gi
+  storageClassName: local-storage-app
+---
+#apiVersion: v1
+#kind: ConfigMap
+#metadata:
+#  name: api-config
+#  namespace: default
+#data:
+#  config.yaml: |
+#    name: "bio-api"
+#    mode: "debug"
+#    port: 8000
+#    alloworigins:
+#      - http://59.110.174.247:8090
+#    log:
+#      level: "debug"
+#      filename: "bio-api.log"
+#      max_size: 200
+#      max_age: 30
+#      max_backups: 7
+#    mysql:
+#      host: "mysql-svc"
+#      port: 3306
+#      user: "root"
+#      password: "root"
+#      db_name: "bio"
+#      max_open_conns: 200
+#      max_idle_conns: 50
+#    redis:
+#      host: "redis-svc"
+#      port: 6379
+#      password: ""
+#      db: 0
+#      pool_size: 100
+#    biochart:
+#      host: "127.0.0.1"
+#      port: 6311
+#    rpath: "/workspace"
+#---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -14,14 +94,36 @@ spec:
     metadata:
       labels:
         name: backend-service
+    # initContainer 初始化schema
     spec:
+      volumes:
+        - name: app-data
+          persistentVolumeClaim:
+            claimName: local-app-claim
+#        - name: api-conf
+#            configMap:
+#              name: api-config
+#              items:
+#                - key: config
+#                  path: config.yaml
       containers:
-      - image: registry.cn-qingdao.aliyuncs.com/zw_private/bio-r:v0.1
-        name: bio-r
-        imagePullPolicy: IfNotPresent
-      - image: registry.cn-qingdao.aliyuncs.com/zw_private/bio-api:v0.1
-        name: bio-api
-        imagePullPolicy: IfNotPresent
+#      - image: registry.cn-qingdao.aliyuncs.com/zw_private/bio-r:v0.01
+#        name: bio-r
+#        imagePullPolicy: IfNotPresent
+#        volumeMounts:
+#          - name: app-data
+#            mountPath: "/workspace"
+#            subPath: "app/r"
+       - image: registry.cn-qingdao.aliyuncs.com/zw_private/bio-api:v0.1
+         name: bio-api
+         imagePullPolicy: IfNotPresent
+         volumeMounts:
+#           - name: api-conf
+#             mountPath: "/workspace"
+#             subPath: "config.yaml"  # 只挂载这一个文件
+           - name: app-data
+             mountPath: "/workspace/r/static"
+             subPath: "r/static"  # 子路径,代表存储卷下面的子目录
 status: {}
 ---
 apiVersion: v1
