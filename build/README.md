@@ -1,3 +1,4 @@
+## 首次部署
 ### 准备工作
 
 ```bash
@@ -7,7 +8,7 @@ $ for vol in mysql redis app; do
     mkdir /mnt/disks/$vol
     mount -t tmpfs $vol /mnt/disks/$vol
 done
-$ kubectl create -f local_sc.yaml  # 创建StorageClass
+$ mkdir /mnt/disks/app/r/static
 ```
 
 ### 部署mysql
@@ -42,6 +43,10 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
 mysql>
 ```
+先手动执行schema.sql
+create database bio;
+use bio;
+source schema.sql;
 
 在node上检查文件
 
@@ -76,7 +81,15 @@ $ redis-cli -h 192.168.0.105 -p 30001
 192.168.0.105:30001>
 ```
 
-### 其他
+### 部署后端服务
+注意：要先把r目录的文件都拷贝到挂载的volume下，不然宿主机的目录会把容器目录全覆盖了
+```bash
+$ kubectl create -f backend-service.yaml
+```
+
+## 版本迭代
+
+## 其他
 
 mysql 集群搭建参考：
 

@@ -18,8 +18,7 @@ spec:
   persistentVolumeReclaimPolicy: Delete
   storageClassName: local-storage-redis
   local:
-    # path: /mnt/disks/redis
-    path: /Volumes/k8s-disk/redis
+     path: /mnt/disks/redis
   nodeAffinity:
     required:
       nodeSelectorTerms:
@@ -27,7 +26,7 @@ spec:
             - key: kubernetes.io/hostname
               operator: In
               values:
-                - docker-desktop
+                - node1
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1

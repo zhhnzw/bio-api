@@ -18,8 +18,7 @@ spec:
   persistentVolumeReclaimPolicy: Delete
   storageClassName: local-storage-mysql
   local:
-    # path: /mnt/disks/mysql
-    path: /Volumes/k8s-disk/mysql
+     path: /mnt/disks/mysql
   nodeAffinity:
     required:
       nodeSelectorTerms:
@@ -27,7 +26,7 @@ spec:
             - key: kubernetes.io/hostname
               operator: In
               values:
-                - docker-desktop
+                - node1
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
