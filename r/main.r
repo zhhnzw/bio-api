@@ -28,7 +28,7 @@ source('./ClusteringAnalysis.r')
 # c('./mut.jpg','./mut.csv'),
 # FALSE,'groupedviolin')
 
-# violin('./sample/BaseFunction/violin/violin.txt','./violin.png',FALSE)
+violin('./sample/BaseFunction/violin/violin.txt','./violin.png',FALSE)
 
 # data_path=c("./sample/BaseFunction/box_line/box.txt")
 # save_path="./box_out.svg"
@@ -55,7 +55,7 @@ source('./ClusteringAnalysis.r')
 
 # ClusteringAnalysis.r
 # NMDS(c('./sample/ClusteringAnalysis/NMDS/nmds_out.txt','./sample/ClusteringAnalysis/NMDS/nmds_group.txt'),'./nmds.svg',18,18)
-PCOA(c('./sample/ClusteringAnalysis/PCOA/pcoa_out.txt','./sample/ClusteringAnalysis/PCOA/pcoa_group.txt'),'pcoa.svg')
+# PCOA(c('./sample/ClusteringAnalysis/PCOA/pcoa_out.txt','./sample/ClusteringAnalysis/PCOA/pcoa_group.txt'),'pcoa.svg')
 # tsne_chart("./sample/ClusteringAnalysis/tsne_chart/tsne.txt",
 #            "./tsne.svg",
 #            "./tsne.txt")
