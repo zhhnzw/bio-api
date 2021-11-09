@@ -84,7 +84,7 @@ metadata:
     name: backend-service
   name: backend-service
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       name: backend-service
@@ -106,7 +106,7 @@ spec:
 #                - key: config
 #                  path: config.yaml
       containers:
-       - image: registry.cn-qingdao.aliyuncs.com/zw_private/bio-r:v0.01
+       - image: registry.cn-qingdao.aliyuncs.com/zw_private/bio-r:v0.2
          name: bio-r
          imagePullPolicy: IfNotPresent
          volumeMounts:
@@ -117,14 +117,11 @@ spec:
          name: bio-api
          imagePullPolicy: IfNotPresent
          volumeMounts:
-#           - name: api-conf
-#             mountPath: "/workspace"
-#             subPath: "config.yaml"  # 只挂载这一个文件
            - name: app-data
              mountPath: "/workspace/r/static"
              subPath: "r/static"  # 子路径,代表存储卷下面的子目录
            - name: app-data
-             mountPath: "/workspace"
+             mountPath: "/workspace/config.yaml"
              subPath: "config.yaml"  # 只挂载这一个文件
 status: {}
 ---
@@ -143,5 +140,10 @@ spec:
     targetPort: 8000
     name: backend-service
     nodePort: 31000
+  - port: 6311
+    protocol: TCP
+    targetPort: 6311
+    name: web-backend
+    nodePort: 31001
   selector:
     name: backend-service
