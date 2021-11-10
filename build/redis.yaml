@@ -118,12 +118,9 @@ metadata:
   labels: 
     app: redis
 spec:
-  type: NodePort
+  clusterIP: None
   ports:
   - port: 6379
-    protocol: TCP
-    targetPort: 6379
     name: redis
-    nodePort: 30001
   selector:
     app: redis

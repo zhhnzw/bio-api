@@ -129,12 +129,9 @@ metadata:
   labels: 
     app: mysql
 spec:
-  type: NodePort
+  clusterIP: None
   ports:
   - port: 3306
-    protocol: TCP
-    targetPort: 3306
     name: mysql
-    nodePort: 30000
   selector:
     app: mysql
