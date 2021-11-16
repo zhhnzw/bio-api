@@ -13,9 +13,7 @@
 
 移除容器及镜像：`docker-compose down --rmi='all'`
 
-![生物信息云平台部署图](生物信息云平台部署图.png)
-![生物信息应用架构](生物信息应用架构.png)
-![服务组成](服务组成.png)
+![整体架构](整体架构.png)
 
 需要启动的服务(配置文件`config.yaml`)：
 * golang后端应用
@@ -26,3 +24,10 @@
 
 <del>go-fastdfs文件保存路径：</del>
 <del>~/workspace/data/fastdfs/files</del>
+
+```bash
+$ docker build -t bio-api:v0.1 .
+
+# 这个 -v 只是本地运行docker测试用的
+$ docker run -p 8000:8000 -v /Users/zhhnzw/workspace/mygithub/bio-api:/workspace --name bio-api -dit bio-api:v0.1 bash
+```
