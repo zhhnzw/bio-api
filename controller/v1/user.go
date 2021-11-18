@@ -67,11 +67,11 @@ func Login(c *gin.Context) {
 		return
 	} else if db.RowsAffected == 0 {
 		resp.Message = "没有这个账号!"
-		c.JSON(http.StatusBadRequest, resp)
+		c.JSON(http.StatusOK, resp)
 		return
 	} else if model1.IsValid == false {
 		resp.Message = "该账号已被禁用, 请与管理员联系!"
-		c.JSON(http.StatusBadRequest, resp)
+		c.JSON(http.StatusOK, resp)
 		return
 	}
 	err := bcrypt.CompareHashAndPassword([]byte(model1.Password), []byte(model.Password))
